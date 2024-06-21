@@ -17,6 +17,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS temperatures
 conn.commit()
 
 # Zamknięcie połączenia
-conn.close()
+conn.close() 
 
 
