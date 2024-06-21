@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
-import thermometer
+import raspberry.thermometer as thermometer
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
