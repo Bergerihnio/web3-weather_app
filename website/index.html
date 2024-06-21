@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Weather Dashboard</title>
+    <link rel="icon" type="icon" href="images/weather-icon.png">
+</head>
+<body>
+    <div class="container">
+        <div class="location-time">
+            <div class="location">🌍 Warsaw</div>
+            <div id="time">🕘 09:03</div>
+            <div id="date"></div>
+        </div>
+        <div class="current-weather">
+            <div id="temperature"></div>
+            <div class="details">
+                <div class="detail">💧 Humidity: 41%</div>
+                <div class="detail">💨 Wind Speed: 2km/h</div>
+                <div class="detail">🔵 Pressure: 997hPa</div>
+                <div class="detail">☀️ UV: 8</div>
+                <div class="sunrise">🌅 Sunrise: 06:37 AM</div>
+                <div class="sunset">🌇 Sunset: 20:37 PM</div>
+            </div>
+        </div>
+        <div class="forecast">
+            <div class="five-day">
+                <div class="day">🌦️ Friday, 1 Sep: 20°C</div>
+                <div class="day">⛅ Saturday, 2 Sep: 22°C</div>
+                <div class="day">☀️ Sunday, 3 Sep: 27°C</div>
+                <div class="day">🌥️ Monday, 4 Sep: 18°C</div>
+                <div class="day">🌧️ Tuesday, 5 Sep: 16°C</div>
+            </div>
+            <div class="hourly">
+                <div class="hour">12:00 - ☀️ 26°C - 3km/h</div>
+                <div class="hour">15:00 - ☀️ 27°C - 2km/h</div>
+                <div class="hour">18:00 - ⛅ 27°C - 2km/h</div>
+                <div class="hour">21:00 - 🌥️ 25°C - 3km/h</div>
+                <div class="hour">00:00 - 🌙 22°C - 3km/h</div>
+            </div>
+        </div>
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>

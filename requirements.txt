@@ -1,0 +1,6 @@
+flask
+w1thermsensor
+gunicorn
+flask_cors
+sqlite3
+APScheduler
