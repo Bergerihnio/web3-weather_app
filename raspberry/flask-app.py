@@ -1,7 +1,8 @@
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
-import raspberry.thermometer as thermometer
+import thermometer
+import web_scrapping
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
@@ -28,7 +29,11 @@ def save_schedule_job():
 @app.route('/data', methods=['GET'])
 def get_data():
     temperature = thermometer.get_temperature()
-    return jsonify({'temperature': f'{temperature:.2f}'})
+    interia_temperature = web_scrapping.good_soup()
+    return jsonify({
+        'temperature': f'{temperature:.2f}',
+        'interia': f'{interia_temperature[0] + interia_temperature[1]}'
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
