@@ -29,10 +29,16 @@ def save_schedule_job():
 @app.route('/data', methods=['GET'])
 def get_data():
     temperature = thermometer.get_temperature()
-    interia_temperature = web_scrapping.good_soup()
+
+    interia_temperature, pressure, wind, sunrise, sunset = web_scrapping.scrap_soup()
+
     return jsonify({
         'temperature': f'{temperature:.2f}',
-        'interia': f'{interia_temperature[0] + interia_temperature[1]}'
+        'interia_temperature': f'{interia_temperature[:2]}',
+        'interia_pressure': pressure,
+        'interia_wind_speed': wind,
+        'interia_sunrise': sunrise,
+        'interia_sunset': sunset 
     })
 
 if __name__ == '__main__':
