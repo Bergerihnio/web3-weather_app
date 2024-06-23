@@ -10,8 +10,6 @@ def scrap_soup():
     if r.status_code != 200:
         print("DUPA")
         return
-    
-    r = requests.get('https://pogoda.interia.pl/prognoza-dlugoterminowa-blonie,cId,1689')
 
     soup = BeautifulSoup(r.content, 'html.parser')
     find_temp = soup.find('div', class_='weather-currently-temp-strict')
@@ -23,7 +21,10 @@ def scrap_soup():
     interia_sunrise, interia_sunset = sun(find_sunrise, find_sunset)
     interia_pressure, interia_wind = find(find_wind_pres)
 
-    return interia_temp, interia_pressure, interia_wind, interia_sunrise, interia_sunset
+    humidity = scrap_weather_com()
+    
+
+    return interia_temp, interia_pressure, interia_wind, interia_sunrise, interia_sunset, humidity
 
 def temp(find_temp):
     interia_temp = find_temp.get_text(strip=True)
@@ -31,7 +32,7 @@ def temp(find_temp):
 
 def find(find_wind_pres):
     interia_wind = find_wind_pres[2].get_text(strip=True)
-    interia_wind = f'{interia_wind[0] + interia_wind[1]}'
+    interia_wind = f'{interia_wind[:2]}'
     
     interia_pressure = find_wind_pres[1].get_text(strip=True)
     interia_pressure = f'{interia_pressure[:4]}'
@@ -44,6 +45,24 @@ def sun(find_sunrise, find_sunset):
     interia_sunset = find_sunset.get_text(strip=True)
 
     return interia_sunrise, interia_sunset
+
+def scrap_weather_com():
+    r = requests.get('https://weather.com/weather/today/l/070de30acaa6420327d5cecbb61fb43b720bb86826506460b7a73d09ab0096aa')
+    
+    if r.status_code != 200:
+        print("DUPA")
+        return
+    
+    soup = BeautifulSoup(r.content, 'html.parser')
+    find_humidity = soup.find('span', {'data-testid': 'PercentageValue'})
+    humidity = find_humidity.get_text(strip=True)
+
+    # find_chance_of_precipitation = soup.find('span', class_='Column--precip--3JCDO')
+    # chance_of_precipitation = find_chance_of_precipitation.get_text(strip=True)
+    # print(chance_of_precipitation)
+
+    return humidity
+    
 
 if __name__ == '__main__':
     scrap_soup()

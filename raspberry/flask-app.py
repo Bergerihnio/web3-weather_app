@@ -30,7 +30,7 @@ def save_schedule_job():
 def get_data():
     temperature = thermometer.get_temperature()
 
-    interia_temperature, pressure, wind, sunrise, sunset = web_scrapping.scrap_soup()
+    interia_temperature, pressure, wind, sunrise, sunset, humidity = web_scrapping.scrap_soup()
 
     return jsonify({
         'temperature': f'{temperature:.2f}',
@@ -38,7 +38,8 @@ def get_data():
         'interia_pressure_hPa': pressure,
         'interia_wind_speed_km_h': wind,
         'interia_sunrise_time': sunrise,
-        'interia_sunset_time': sunset 
+        'interia_sunset_time': sunset,
+        'humidity': humidity
     })
 
 if __name__ == '__main__':

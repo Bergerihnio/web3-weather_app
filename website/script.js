@@ -11,10 +11,12 @@ function get_api() {
                 sunset = data.interia_sunset_time;
                 wind_speed = data.interia_wind_speed_km_h;
                 interia_temp = data.interia_temperature;
-        
-                if (temperature < 15) {
+                humidity = data.humidity;
+
+
+                if (interia_temp < 15) {
                     score = "🧊🥶";
-                } else if (temperature > 30) {
+                } else if (interia_temp > 30) {
                     score = "🥵"
                 } else {
                     score = "🌡️😎";
@@ -30,10 +32,13 @@ function get_api() {
                 sunsetDiv.textContent = `🌇 Sunset: ${sunset} PM`;
 
                 const wind_speedDiv = document.getElementById("wind_speed");
-                wind_speedDiv.textContent = `💨 Wind Speed: ${wind_speed}`;
+                wind_speedDiv.textContent = `💨 Wind Speed: ${wind_speed}km/h`;
     
                 const temperatureDiv = document.getElementById("temperature");
-                temperatureDiv.textContent = `${score} Temperature: ${temperature}°C`;
+                temperatureDiv.textContent = `${score} Temperature: ${interia_temp}°C`;
+
+                const humidityDiv = document.getElementById("humidity");
+                humidityDiv.textContent = `💧 Humidity: ${humidity}`;
             }
         })
 
