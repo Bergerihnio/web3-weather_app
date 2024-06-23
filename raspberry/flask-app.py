@@ -21,7 +21,7 @@ def save_to_db(temperature):
     conn.close()
 
 # Zadanie do pobierania i zapisywania temperatury co minute
-@scheduler.scheduled_job('interval', seconds=10)
+@scheduler.scheduled_job('interval', minutes=10)
 def save_schedule_job():
     temperature = thermometer.get_temperature()
     save_to_db(temperature)
@@ -35,11 +35,11 @@ def get_data():
     return jsonify({
         'temperature': f'{temperature:.2f}',
         'interia_temperature': f'{interia_temperature[:2]}',
-        'interia_pressure': pressure,
-        'interia_wind_speed': wind,
-        'interia_sunrise': sunrise,
-        'interia_sunset': sunset 
+        'interia_pressure_hPa': pressure,
+        'interia_wind_speed_km_h': wind,
+        'interia_sunrise_time': sunrise,
+        'interia_sunset_time': sunset 
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host='0.0.0.0', port=5000)

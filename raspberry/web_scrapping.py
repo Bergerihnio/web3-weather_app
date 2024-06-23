@@ -31,10 +31,10 @@ def temp(find_temp):
 
 def find(find_wind_pres):
     interia_wind = find_wind_pres[2].get_text(strip=True)
-    interia_wind = f'{interia_wind[0] + interia_wind[1]} km/h'
+    interia_wind = f'{interia_wind[0] + interia_wind[1]}'
     
     interia_pressure = find_wind_pres[1].get_text(strip=True)
-    interia_pressure = f'{interia_pressure[:4]} hPa'
+    interia_pressure = f'{interia_pressure[:4]}'
 
     return interia_pressure, interia_wind
 
@@ -44,7 +44,6 @@ def sun(find_sunrise, find_sunset):
     interia_sunset = find_sunset.get_text(strip=True)
 
     return interia_sunrise, interia_sunset
-
 
 if __name__ == '__main__':
     scrap_soup()

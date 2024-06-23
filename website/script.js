@@ -1,20 +1,37 @@
 function get_api() {
-    fetch("http://bergerihnio.ddns.net/data")
+    fetch('http://192.168.178.44:5000/data')
         .then(response => {
             return response.json(); 
         })
         .then(data => {
-            if ("temperature" in data[0]) {
-                temperature = data[0].temperature
-            
+            if ("temperature" in data) {
+                temperature = parseFloat(data.temperature);
+                pressure = parseFloat(data.interia_pressure_hPa);
+                sunrise = data.interia_sunrise_time;
+                sunset = data.interia_sunset_time;
+                wind_speed = data.interia_wind_speed_km_h;
+                interia_temp = data.interia_temperature;
+        
                 if (temperature < 15) {
                     score = "🧊🥶";
                 } else if (temperature > 30) {
-                    score = "🥵" // ethnuil city
+                    score = "🥵"
                 } else {
                     score = "🌡️😎";
                 }
+                
+                const pressureDiv = document.getElementById("pressure");
+                pressureDiv.textContent = `🔵Pressure: ${pressure} hPa`;
 
+                const sunriseDiv = document.getElementById("sunrise");
+                sunriseDiv.textContent = `🌅 Sunrise: ${sunrise} AM`;
+
+                const sunsetDiv = document.getElementById("sunset");
+                sunsetDiv.textContent = `🌇 Sunset: ${sunset} PM`;
+
+                const wind_speedDiv = document.getElementById("wind_speed");
+                wind_speedDiv.textContent = `💨 Wind Speed: ${wind_speed}`;
+    
                 const temperatureDiv = document.getElementById("temperature");
                 temperatureDiv.textContent = `${score} Temperature: ${temperature}°C`;
             }
@@ -25,7 +42,7 @@ function get_api() {
         })
 }
 
-setInterval(get_api, 60000);
+setInterval(get_api, 600000);
 get_api();
 
 
@@ -62,3 +79,5 @@ function get_time() {
 
 setInterval(get_time, 60000);
 get_time();
+
+
