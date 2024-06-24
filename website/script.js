@@ -12,6 +12,7 @@ function get_api() {
                 wind_speed = data.interia_wind_speed_km_h;
                 interia_temp = data.interia_temperature;
                 humidity = data.humidity;
+                rainPrecipitation = data.rain_precipitation
 
 
                 if (interia_temp < 15) {
@@ -39,6 +40,9 @@ function get_api() {
 
                 const humidityDiv = document.getElementById("humidity");
                 humidityDiv.textContent = `💧 Humidity: ${humidity}`;
+
+                const precipitationDiv = document.getElementById("rain_precipitation");
+                precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}`;
             }
         })
 
