@@ -57,6 +57,7 @@ def scrap_weather_com():
     soup = BeautifulSoup(r.content, 'html.parser')
     find_humidity = soup.find('span', {'data-testid': 'PercentageValue'})
     humidity = find_humidity.get_text(strip=True)
+    humidity =  humidity.replace("%", "")
 
     return humidity
 
@@ -76,6 +77,8 @@ def scrap_rain():
             # Pobierz tekst rodzica tego elementu (który zawiera '1%')
             rain_precipitation = span.parent.get_text(strip=True)
             rain_precipitation = rain_precipitation.replace("Chance of Rain", "")
+            rain_precipitation = rain_precipitation.replace("%", "")
+
         return rain_precipitation
             
 

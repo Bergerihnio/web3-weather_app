@@ -6,7 +6,7 @@ import random
 def get_temperature():
     temperature = random.randrange(5, 25) # only for test
     # temperature = sensor.get_temperature()
-    return temperature
+    return f'{temperature:.2f}'
 
 if __name__ == '__main__':
     get_temperature()

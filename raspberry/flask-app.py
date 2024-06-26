@@ -14,7 +14,7 @@ scheduler.start()
 
 
 # Zadanie do pobierania i zapisywania temperatury co minute
-@scheduler.scheduled_job('interval', minutes=10)
+@scheduler.scheduled_job('interval', hours=1)
 def save_schedule_job():
     temperature = thermometer.get_temperature()
     interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
@@ -34,15 +34,30 @@ def save_to_db(interia_temperature):
 def last_hour():
     conn = sqlite3.connect('temperatures.db')
     c = conn.cursor()
-    c.execute("SELECT temperature FROM temperatures ORDER BY date DESC")
-    rows = c.fetchall()
+    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC")
+    last_hour_data = c.fetchone()
 
-    last_hour_temp = rows[0][0]
+    last_hour_temp = last_hour_data[0]
+    last_hour_time = last_hour_data[1]
 
     conn.commit()
     conn.close()
 
-    return last_hour_temp
+    return last_hour_temp, last_hour_time
+
+def last_second_hour():
+    conn = sqlite3.connect('temperatures.db')
+    c = conn.cursor()
+    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC LIMIT 1 OFFSET 1")
+    last_second_hour_data = c.fetchone()
+
+    last_second_hour_temp = last_second_hour_data[0]
+    last_second_hour_time = last_second_hour_data[1]
+
+    conn.commit()
+    conn.close()
+
+    return last_second_hour_temp, last_second_hour_time
     
 
 @app.route('/data', methods=['GET'])
@@ -51,19 +66,28 @@ def get_data():
 
     interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
 
-    last_hour_temp = last_hour()
+    last_hour_temp, last_hour_time = last_hour()
 
-    return jsonify({
-        'temperature': f'{temperature:.2f}',
+    last_second_hour_temp, last_second_hour_time = last_second_hour()
+
+    data = {
+        'temperature': f'{temperature}',
         'interia_temperature': f'{interia_temperature[:2]}',
         'interia_pressure_hPa': pressure,
         'interia_wind_speed_km_h': wind,
         'interia_sunrise_time': sunrise,
         'interia_sunset_time': sunset,
-        'humidity': humidity,
-        'rain_precipitation': rain_precipitation,
-        'Last_hour_temperature': last_hour_temp
-    })
+        'humidity_in_percentage': humidity, #'humidity_in_perentage': humidity,
+        'rain_precipitation_percentage': rain_precipitation,
+        'last_hour_data': {'time': f'{last_hour_time}', 'temp': f'{last_hour_temp}'},
+        'last_second_hour_data': {'time': f'{last_second_hour_time}', 'temp': f'{last_second_hour_temp}'}
+    }
+
+    return jsonify(data)
+
+#'temperature': { 'value': f'{temperature:.2f}', 'unit': '°C'},
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+    

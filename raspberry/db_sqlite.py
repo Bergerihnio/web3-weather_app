@@ -13,6 +13,13 @@ c.execute('''CREATE TABLE IF NOT EXISTS temperatures
 
 # c.execute("SELECT temperature FROM temperatures ORDER BY date DESC")
 
+c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC")
+
+last_hour_temp = c.fetchone()
+
+
+print(last_hour_temp[0], last_hour_temp[1])
+
 # rows = c.fetchall()
 
 
