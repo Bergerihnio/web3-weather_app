@@ -14,19 +14,19 @@ scheduler.start()
 
 
 # Zadanie do pobierania i zapisywania temperatury co minute
-@scheduler.scheduled_job('interval', hours=1)
+@scheduler.scheduled_job('cron', minute='0')
 def save_schedule_job():
     temperature = thermometer.get_temperature()
     interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
 
-    save_to_db(interia_temperature)
+    save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation)
 
 
 # Funkcja do zapisywania temperatury do bazy danych
-def save_to_db(interia_temperature): 
+def save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation): 
     conn = sqlite3.connect('temperatures.db')
     c = conn.cursor()
-    c.execute("INSERT INTO temperatures (temperature) VALUES (?)", (interia_temperature[:2],))
+    c.execute("INSERT INTO temperatures (temperature, humidity, pressure, sunrise, sunset, wind, rain) VALUES (?, ?, ?, ?, ?, ?, ?)", (interia_temperature[:2], humidity, pressure, sunrise, sunset, wind, rain_precipitation))
 
     conn.commit()
     conn.close()
@@ -85,7 +85,6 @@ def get_data():
 
     return jsonify(data)
 
-#'temperature': { 'value': f'{temperature:.2f}', 'unit': '°C'},
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

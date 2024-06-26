@@ -14,6 +14,8 @@ function get_api() {
                 humidity = data.humidity_in_percentage;
                 rainPrecipitation = data.rain_precipitation_percentage;
                 lastHourTemp = parseFloat(data.last_hour_data.temp);
+                lastHourTime = data.last_hour_data.time;
+                lastHourTime = lastHourTime.slice(0, 5);
                 secondLastHourTemp = parseFloat(data.last_second_hour_data.temp);
 
                 if (interiaTemp < 15) {
@@ -49,7 +51,7 @@ function get_api() {
                 precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}%`;
 
                 const lastHourTempDiv = document.getElementById("hour");
-                lastHourTempDiv.textContent = `☀️ ${lastHourTemp}°C Today`;
+                lastHourTempDiv.textContent = `${lastHourTime} ☀️ ${lastHourTemp}°C - ☔ ${rainPrecipitation}%`;
             }
         })
 
