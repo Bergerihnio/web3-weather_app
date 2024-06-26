@@ -9,20 +9,24 @@ function get_api() {
                 pressure = parseFloat(data.interia_pressure_hPa);
                 sunrise = data.interia_sunrise_time;
                 sunset = data.interia_sunset_time;
-                wind_speed = data.interia_wind_speed_km_h;
-                interia_temp = data.interia_temperature;
-                humidity = data.humidity;
-                rainPrecipitation = data.rain_precipitation
+                windSpeed = data.interia_wind_speed_km_h;
+                interiaTemp = data.interia_temperature;
+                humidity = data.humidity_in_percentage;
+                rainPrecipitation = data.rain_precipitation_percentage;
+                lastHourTemp = parseFloat(data.last_hour_data.temp);
+                secondLastHourTemp = parseFloat(data.last_second_hour_data.temp);
 
-
-                if (interia_temp < 15) {
+                if (interiaTemp < 15) {
                     score = "🧊🥶";
-                } else if (interia_temp > 30) {
+                } else if (interiaTemp > 30) {
                     score = "🥵"
                 } else {
                     score = "🌡️😎";
                 }
                 
+
+                const { day, dayDigit, month } = get_date();
+
                 const pressureDiv = document.getElementById("pressure");
                 pressureDiv.textContent = `🔵Pressure: ${pressure} hPa`;
 
@@ -32,17 +36,20 @@ function get_api() {
                 const sunsetDiv = document.getElementById("sunset");
                 sunsetDiv.textContent = `🌇 Sunset: ${sunset} PM`;
 
-                const wind_speedDiv = document.getElementById("wind_speed");
-                wind_speedDiv.textContent = `💨 Wind Speed: ${wind_speed}km/h`;
+                const windSpeedDiv = document.getElementById("windSpeed");
+                windSpeedDiv.textContent = `💨 Wind Speed: ${windSpeed} km/h`;
     
                 const temperatureDiv = document.getElementById("temperature");
-                temperatureDiv.textContent = `${score} Temperature: ${interia_temp}°C`;
+                temperatureDiv.textContent = `${score} Temperature: ${interiaTemp}°C`;
 
                 const humidityDiv = document.getElementById("humidity");
-                humidityDiv.textContent = `💧 Humidity: ${humidity}`;
+                humidityDiv.textContent = `💧 Humidity: ${humidity}%`;
 
                 const precipitationDiv = document.getElementById("rain_precipitation");
-                precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}`;
+                precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}%`;
+
+                const lastHourTempDiv = document.getElementById("hour");
+                lastHourTempDiv.textContent = `☀️ ${lastHourTemp}°C Today`;
             }
         })
 
@@ -54,24 +61,29 @@ function get_api() {
 setInterval(get_api, 600000);
 get_api();
 
-
 function get_date() {
-    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const d = new Date();
-    let day = weekday[d.getDay()];
+    const day = weekday[d.getDay()];
+    const dayDigit = d.getDate();
+    const month = months[d.getMonth()];
 
-    let dayDigit = d.getDate();
+    return { day, dayDigit, month };
+}
 
-    let month = months[d.getMonth()];
+
+function display_date() {
+    
+    const { day, dayDigit, month } = get_date();
  
     const dateDiv = document.getElementById("date");
     dateDiv.textContent = `📅 ${day}, ${dayDigit} ${month}`;
 }
 
-setInterval(get_date, 86400000);
-get_date();
+setInterval(display_date, 86400000);
+display_date();
 
 
 function get_time() {
