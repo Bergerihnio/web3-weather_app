@@ -10,12 +10,14 @@ c.execute('''CREATE TABLE IF NOT EXISTS temperatures
               time TEXT DEFAULT (time('now', 'localtime')),
               date TEXT DEFAULT (date('now')))''')
 
-c.execute("SELECT temperature FROM temperatures ORDER BY date DESC")
 
-rows = c.fetchall()
+# c.execute("SELECT temperature FROM temperatures ORDER BY date DESC")
 
-for row in rows:
-    print(row[0])
+# rows = c.fetchall()
+
+
+# for row in rows:
+#     print(row[0])
 
 # c.execute("SELECT * FROM temperatures")
 # print(c.fetchall())
