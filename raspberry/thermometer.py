@@ -4,7 +4,7 @@ import random
 # sensor = W1ThermSensor()
 
 def get_temperature():
-    temperature = random.randrange(5, 25) # only for test
+    temperature = random.randrange(5, 25) # only for testZSD
     # temperature = sensor.get_temperature()
     return f'{temperature:.2f}'
 

@@ -31,33 +31,15 @@ def save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, r
     conn.commit()
     conn.close()
 
-def last_hour():
+def get_data_sql(offset):
     conn = sqlite3.connect('temperatures.db')
     c = conn.cursor()
-    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC")
-    last_hour_data = c.fetchone()
+    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC LIMIT 1 OFFSET (?)", (offset,))
+    data = c.fetchone()
+    
+    temperature, time = data
 
-    last_hour_temp = last_hour_data[0]
-    last_hour_time = last_hour_data[1]
-
-    conn.commit()
-    conn.close()
-
-    return last_hour_temp, last_hour_time
-
-def last_second_hour():
-    conn = sqlite3.connect('temperatures.db')
-    c = conn.cursor()
-    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC LIMIT 1 OFFSET 1")
-    last_second_hour_data = c.fetchone()
-
-    last_second_hour_temp = last_second_hour_data[0]
-    last_second_hour_time = last_second_hour_data[1]
-
-    conn.commit()
-    conn.close()
-
-    return last_second_hour_temp, last_second_hour_time
+    return temperature, time
     
 
 @app.route('/data', methods=['GET'])
@@ -66,9 +48,17 @@ def get_data():
 
     interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
 
-    last_hour_temp, last_hour_time = last_hour()
+    last_hour_temp, last_hour_time = get_data_sql(0)
 
-    last_second_hour_temp, last_second_hour_time = last_second_hour()
+    last_second_hour_temp, last_second_hour_time = get_data_sql(1)
+
+    last_fourth_hour_temp, last_fourth_hour_time = get_data_sql(3)
+
+    last_seventh_hour_temp, last_seventh_hour_time = get_data_sql(6)
+
+    last_10th_hour_temp, last_10th_hour_time = get_data_sql(9)
+
+    # last_13th_hour_temp, last_13th_hour_time = get_data_sql(12)
 
     data = {
         'temperature': f'{temperature}',
@@ -77,10 +67,14 @@ def get_data():
         'interia_wind_speed_km_h': wind,
         'interia_sunrise_time': sunrise,
         'interia_sunset_time': sunset,
-        'humidity_in_percentage': humidity, #'humidity_in_perentage': humidity,
+        'humidity_in_percentage': humidity, 
         'rain_precipitation_percentage': rain_precipitation,
         'last_hour_data': {'time': f'{last_hour_time}', 'temp': f'{last_hour_temp}'},
-        'last_second_hour_data': {'time': f'{last_second_hour_time}', 'temp': f'{last_second_hour_temp}'}
+        'last_second_hour_data': {'time': f'{last_second_hour_time}', 'temp': f'{last_second_hour_temp}'},
+        'last_fourth_hour_data': {'time': f'{last_fourth_hour_temp}', 'temp': f'{last_fourth_hour_time}'},
+        'last_seventh_hour_data': {'time': f'{last_seventh_hour_temp}', 'temp': f'{last_seventh_hour_time}'},
+        # 'last_10th_hour_data': {'time': f'{last_10th_hour_temp}', 'temp': f'{last_10th_hour_time}'},
+        # 'last_13th_hour_data': {'time': f'{last_13th_hour_temp}', 'temp': f'{last_13th_hour_time}'}
     }
 
     return jsonify(data)

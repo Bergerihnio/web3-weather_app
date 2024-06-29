@@ -51,7 +51,7 @@ function get_api() {
                 precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}%`;
 
                 const lastHourTempDiv = document.getElementById("hour");
-                lastHourTempDiv.textContent = `${lastHourTime} ☀️ ${lastHourTemp}°C - ☔ ${rainPrecipitation}%`;
+                lastHourTempDiv.textContent = `x${lastHourTime} ☀️ ${lastHourTemp}°C - ☔ ${rainPrecipitation}%`;
             }
         })
 

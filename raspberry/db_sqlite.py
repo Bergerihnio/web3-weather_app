@@ -19,41 +19,25 @@ c.execute('''CREATE TABLE IF NOT EXISTS temperatures
 
 # c.execute("SELECT temperature FROM temperatures ORDER BY date DESC")
 
-c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC")
+# c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC")
 
-last_hour_temp = c.fetchone()
-
-
-print(last_hour_temp[0], last_hour_temp[1])
+# last_hour_temp = c.fetchone()
 
 
-{
-  "humidity_in_percentage": "50",
-  "interia_pressure_hPa": "1014",
-  "interia_sunrise_time": "04:18",
-  "interia_sunset_time": "21:02",
-  "interia_temperature": "26",
-  "interia_wind_speed_km_h": "9 ",
-  "last_hour_data": {
-    "temp": "29.0",
-    "time": "19:30:00"
-  },
-  "last_second_hour_data": {
-    "temp": "29.0",
-    "time": "18:30:00"
-  },
-  "rain_precipitation_percentage": "0",
-  "temperature": "21.00"
-}
+# print(last_hour_temp[0], last_hour_temp[1])
 
-# rows = c.fetchall()
+def get_data_sql(offset):
+    conn = sqlite3.connect('temperatures.db')
+    c = conn.cursor()
+    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC LIMIT 1 OFFSET (?)", (offset,))
+    data = c.fetchone()
+    
+    temperature, time = data
+
+    return temperature, time
 
 
-# for row in rows:
-#     print(row[0])
-
-# c.execute("SELECT * FROM temperatures")
-# print(c.fetchall())
+first_temp, first_time = get_data_sql(1)
 
 # Zapisanie zmian
 conn.commit()
