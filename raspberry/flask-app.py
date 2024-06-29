@@ -12,29 +12,34 @@ CORS(app)
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+i = 0
 
 # Zadanie do pobierania i zapisywania temperatury co minute
 @scheduler.scheduled_job('cron', minute='0')
 def save_schedule_job():
+    global i 
     temperature = thermometer.get_temperature()
     interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
 
     save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation)
+    i += 1
+
+    print(f'Zapisano pomyślnie po raz {i}')
 
 
 # Funkcja do zapisywania temperatury do bazy danych
 def save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation): 
-    conn = sqlite3.connect('temperatures.db')
+    conn = sqlite3.connect('weather.db')
     c = conn.cursor()
-    c.execute("INSERT INTO temperatures (temperature, humidity, pressure, sunrise, sunset, wind, rain) VALUES (?, ?, ?, ?, ?, ?, ?)", (interia_temperature[:2], humidity, pressure, sunrise, sunset, wind, rain_precipitation))
+    c.execute("INSERT INTO weather (temperature, humidity, pressure, sunrise, sunset, wind, rain) VALUES (?, ?, ?, ?, ?, ?, ?)", (interia_temperature[:2], humidity, pressure, sunrise, sunset, wind, rain_precipitation))
 
     conn.commit()
     conn.close()
 
 def get_data_sql(offset):
-    conn = sqlite3.connect('temperatures.db')
+    conn = sqlite3.connect('weather.db')
     c = conn.cursor()
-    c.execute("SELECT temperature, time FROM temperatures ORDER BY date DESC, time DESC LIMIT 1 OFFSET (?)", (offset,))
+    c.execute("SELECT temperature, time FROM weather ORDER BY date DESC, time DESC LIMIT 1 OFFSET (?)", (offset,))
     data = c.fetchone()
     
     temperature, time = data
@@ -58,7 +63,7 @@ def get_data():
 
     last_10th_hour_temp, last_10th_hour_time = get_data_sql(9)
 
-    # last_13th_hour_temp, last_13th_hour_time = get_data_sql(12)
+    last_13th_hour_temp, last_13th_hour_time = get_data_sql(12)
 
     data = {
         'temperature': f'{temperature}',
@@ -71,10 +76,10 @@ def get_data():
         'rain_precipitation_percentage': rain_precipitation,
         'last_hour_data': {'time': f'{last_hour_time}', 'temp': f'{last_hour_temp}'},
         'last_second_hour_data': {'time': f'{last_second_hour_time}', 'temp': f'{last_second_hour_temp}'},
-        'last_fourth_hour_data': {'time': f'{last_fourth_hour_temp}', 'temp': f'{last_fourth_hour_time}'},
-        'last_seventh_hour_data': {'time': f'{last_seventh_hour_temp}', 'temp': f'{last_seventh_hour_time}'},
-        # 'last_10th_hour_data': {'time': f'{last_10th_hour_temp}', 'temp': f'{last_10th_hour_time}'},
-        # 'last_13th_hour_data': {'time': f'{last_13th_hour_temp}', 'temp': f'{last_13th_hour_time}'}
+        'last_fourth_hour_data': {'time': f'{last_fourth_hour_time}', 'temp': f'{last_fourth_hour_temp}'},
+        'last_seventh_hour_data': {'time': f'{last_seventh_hour_time}', 'temp': f'{last_seventh_hour_temp}'},
+        'last_10th_hour_data': {'time': f'{last_10th_hour_time}', 'temp': f'{last_10th_hour_temp}'},
+        'last_13th_hour_data': {'time': f'{last_13th_hour_time}', 'temp': f'{last_13th_hour_temp}'}
     }
 
     return jsonify(data)

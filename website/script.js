@@ -1,3 +1,8 @@
+const getOldWeather = (oldWeatherData) => ({
+    temp: oldWeatherData.temp,
+    time: oldWeatherData.time.slice(0,5)
+})
+
 function get_api() {
     fetch('http://192.168.178.44:5000/data')
         .then(response => {
@@ -13,10 +18,15 @@ function get_api() {
                 interiaTemp = data.interia_temperature;
                 humidity = data.humidity_in_percentage;
                 rainPrecipitation = data.rain_precipitation_percentage;
-                lastHourTemp = parseFloat(data.last_hour_data.temp);
-                lastHourTime = data.last_hour_data.time;
-                lastHourTime = lastHourTime.slice(0, 5);
-                secondLastHourTemp = parseFloat(data.last_second_hour_data.temp);
+
+                const oldWeather = {
+                    oneHourBack: getOldWeather(data.last_hour_data),
+                    twoHoursBack: getOldWeather(data.last_second_hour_data),
+                    fourthHoursBack: getOldWeather(data.last_fourth_hour_data),
+                    sevenHoursBack: getOldWeather(data.last_seventh_hour_data),
+                    tenHoursBack: getOldWeather(data.last_10th_hour_data),
+                    thirteenHoursBack: getOldWeather(data.last_13th_hour_data)
+                }
 
                 if (interiaTemp < 15) {
                     score = "🧊🥶";
@@ -51,7 +61,19 @@ function get_api() {
                 precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}%`;
 
                 const lastHourTempDiv = document.getElementById("hour");
-                lastHourTempDiv.textContent = `x${lastHourTime} ☀️ ${lastHourTemp}°C - ☔ ${rainPrecipitation}%`;
+                lastHourTempDiv.textContent = `${oldWeather.oneHourBack.time} ☀️ ${oldWeather.oneHourBack.temp}°C - ☔ ${rainPrecipitation}%`;
+
+                const fourthLastHourTempDiv = document.getElementById("fourth_hour");
+                fourthLastHourTempDiv.textContent = `${oldWeather.fourthHoursBack.time} ☀️ ${oldWeather.fourthHoursBack.temp}°C -`;
+
+                const seventhLastHourTempDiv = document.getElementById("seventh_hour");
+                seventhLastHourTempDiv.textContent = `${oldWeather.sevenHoursBack.time} 🌥️ ${oldWeather.sevenHoursBack.temp}°C -`;
+
+                const tenHoursBackTempDiv = document.getElementById("tenth_hour");
+                tenHoursBackTempDiv.textContent = `${oldWeather.tenHoursBack.time} 🌦️ ${oldWeather.tenHoursBack.temp}°C`;
+
+                const thirteenHoursBackTempDiv = document.getElementById("thirteen_hour");
+                thirteenHoursBackTempDiv.textContent = `${oldWeather.thirteenHoursBack.time} 🌦️ ${oldWeather.thirteenHoursBack.temp}°C`;
             }
         })
 
