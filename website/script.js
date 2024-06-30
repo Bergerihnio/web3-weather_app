@@ -1,7 +1,14 @@
 const getOldWeather = (oldWeatherData) => ({
-    temp: oldWeatherData.temp,
+    temp: parseFloat(oldWeatherData.temp),
     time: oldWeatherData.time.slice(0,5),
     rain: oldWeatherData.rain
+})
+
+const getMedianTempData = (medianTempData) => ({
+    date: medianTempData.date.slice(8, 11),
+    median_temp: parseFloat(medianTempData.median_temp),
+    month: medianTempData.month,
+    day: medianTempData.day
 })
 
 function get_api() {
@@ -27,6 +34,14 @@ function get_api() {
                     sevenHoursBack: getOldWeather(data.last_seventh_hour_data),
                     tenHoursBack: getOldWeather(data.last_10th_hour_data),
                     thirteenHoursBack: getOldWeather(data.last_13th_hour_data)
+                }
+
+                const medianTempData = {
+                    lastMedian: getMedianTempData(data.last_median_temp),
+                    lastSecondMedian: getMedianTempData(data.last_second_median_temp),
+                    lastThirdMedian: getMedianTempData(data.last_third_median_temp),
+                    lastFourthMedian: getMedianTempData(data.last_fourth_median_temp),
+                    lastFifthMedian: getMedianTempData(data.last_fifth_median_temp)
                 }
 
                 if (interiaTemp < 15) {
@@ -75,6 +90,21 @@ function get_api() {
 
                 const thirteenHoursBackTempDiv = document.getElementById("thirteen_hour");
                 thirteenHoursBackTempDiv.textContent = `${oldWeather.thirteenHoursBack.time} 🌦️ ${oldWeather.thirteenHoursBack.temp}°C - ☔ ${oldWeather.thirteenHoursBack.rain}%`;
+
+                const lastMedianDiv = document.getElementById("day");
+                lastMedianDiv.textContent = `🌦️ ${medianTempData.lastMedian.day}, ${medianTempData.lastMedian.date} ${medianTempData.lastMedian.month} ${medianTempData.lastMedian.median_temp}°C`;
+
+                const lastSecondMedianDiv = document.getElementById("last_day");
+                lastSecondMedianDiv.textContent = `⛅ ${medianTempData.lastSecondMedian.day}, ${medianTempData.lastSecondMedian.date} ${medianTempData.lastSecondMedian.month} ${medianTempData.lastSecondMedian.median_temp}°C`;
+
+                const lastThirdMedianDiv = document.getElementById("second_last_day");
+                lastThirdMedianDiv.textContent = `☀️ ${medianTempData.lastThirdMedian.day}, ${medianTempData.lastThirdMedian.date} ${medianTempData.lastThirdMedian.month} ${medianTempData.lastThirdMedian.median_temp}°C`;
+
+                const lastFourthMedianDiv = document.getElementById("third_last_day");
+                lastFourthMedianDiv.textContent = `🌥️ ${medianTempData.lastFourthMedian.day}, ${medianTempData.lastFourthMedian.date} ${medianTempData.lastFourthMedian.month} ${medianTempData.lastFourthMedian.median_temp}°C`;
+
+                const lastFifthMedianDiv = document.getElementById("fourth_last_day");
+                lastFifthMedianDiv.textContent = `🌧️ ${medianTempData.lastFifthMedian.day}, ${medianTempData.lastFifthMedian.date} ${medianTempData.lastFifthMedian.month} ${medianTempData.lastFifthMedian.median_temp}°C`;
             }
         })
 

@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
+import datetime
 import thermometer
 import web_scrapping
 import stats
@@ -56,8 +57,25 @@ def get_data_sql(offset):
 
 def get_stats_sql(offset):
     median_temp = stats.get_stats_sql(offset)
+    median_temp, date = median_temp
+
+    unmutable_date = date # -> 2024-06-26
+    date = date[5:10] # -> 06-26
+    month = date[:2] # -> 06
+    day = date[3:5] # -> 26
+
+    if month.startswith('0'):
+        month = month[1:]
+        
+    month = int(month)
     
-    return median_temp
+    list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    month_word = list[month-1]
+
+    date_obj = datetime.datetime.strptime(unmutable_date, '%Y-%m-%d')
+    day_of_week = date_obj.strftime('%A')
+
+    return median_temp, day_of_week, month_word, unmutable_date
     
 
 @app.route('/data', methods=['GET'])
@@ -78,7 +96,15 @@ def get_data():
 
     last_13th_hour_temp, last_13th_hour_rain, last_13th_hour_time = get_data_sql(12)
 
-    last_median_temp, last_median_date = get_stats_sql(0) 
+    last_median_temp, last_median_day_of_week, last_median_month_word, last_median_unmutable_date = get_stats_sql(0) 
+
+    last_second_median_temp, last_second_median_day_of_week, last_second_median_month_word, last_second_median_unmutable_date = get_stats_sql(1) 
+
+    last_third_median_temp, last_third_median_day_of_week, last_third_median_month_word, last_third_median_unmutable_date = get_stats_sql(2) 
+
+    last_fourth_median_temp, last_fourth_median_day_of_week, last_fourth_median_month_word, last_fourth_median_unmutable_date = get_stats_sql(3) 
+
+    last_fifth_median_temp, last_fifth_median_day_of_week, last_fifth_median_month_word, last_fifth_median_unmutable_date = get_stats_sql(4) 
 
     data = {
         'temperature': f'{temperature}',
@@ -95,7 +121,11 @@ def get_data():
         'last_seventh_hour_data': {'time': f'{last_seventh_hour_time}', 'temp': f'{last_seventh_hour_temp}', 'rain': f'{last_seventh_hour_rain}'},
         'last_10th_hour_data': {'time': f'{last_10th_hour_time}', 'temp': f'{last_10th_hour_temp}', 'rain': f'{last_10th_hour_rain}'},
         'last_13th_hour_data': {'time': f'{last_13th_hour_time}', 'temp': f'{last_13th_hour_temp}', 'rain': f'{last_13th_hour_rain}'},
-        'last_median_temp': {'median_temp': f'{last_median_temp}', 'date': f'{last_median_date}'}
+        'last_median_temp': {'median_temp': f'{last_median_temp}', 'date': f'{last_median_unmutable_date}', 'day': f'{last_median_day_of_week}', 'month': f'{last_median_month_word}'},
+        'last_second_median_temp': {'median_temp': f'{last_second_median_temp}', 'date': f'{last_second_median_unmutable_date}', 'day': f'{last_second_median_day_of_week}', 'month': f'{last_second_median_month_word}'},
+        'last_third_median_temp': {'median_temp': f'{last_third_median_temp}', 'date': f'{last_third_median_unmutable_date}', 'day': f'{last_third_median_day_of_week}', 'month': f'{last_third_median_month_word}'},
+        'last_fourth_median_temp': {'median_temp': f'{last_fourth_median_temp}', 'date': f'{last_fourth_median_unmutable_date}', 'day': f'{last_fourth_median_day_of_week}', 'month': f'{last_fourth_median_month_word}'},
+        'last_fifth_median_temp': {'median_temp': f'{last_fifth_median_temp}', 'date': f'{last_fifth_median_unmutable_date}', 'day': f'{last_fifth_median_day_of_week}', 'month': f'{last_fifth_median_month_word}'},
     }
 
     return jsonify(data)

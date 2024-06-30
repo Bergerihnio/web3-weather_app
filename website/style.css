@@ -70,7 +70,7 @@ body {
     gap: 40px;
 }
 
-.day, .hour  ,#hour, #fourth_hour, #seventh_hour, #tenth_hour, #thirteen_hour {
+.day, .hour  ,#hour, #fourth_hour, #seventh_hour, #tenth_hour, #thirteen_hour, #day, #last_day, #second_last_day, #third_last_day, #fourth_last_day {
     background-color: #f9f9f9;
     padding: 10px 30px 10px 30px;
     margin: 10px 0 10px 0;
@@ -79,7 +79,7 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.day:hover, .hour:hover, #hour:hover, #fourth_hour:hover, #seventh_hour:hover, #tenth_hour:hover, #thirteen_hour:hover {
+.day:hover, #day:hover, #last_day:hover, #second_last_day:hover, #third_last_day:hover, #fourth_last_day:hover, .hour:hover, #hour:hover, #fourth_hour:hover, #seventh_hour:hover, #tenth_hour:hover, #thirteen_hour:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgb(3, 174, 210, 0.5);
 }

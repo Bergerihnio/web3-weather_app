@@ -18,7 +18,6 @@ def get_stats():
     for row in rows:
         rows_list.append(row[0])  
 
-
     median_temp = statistics.median(rows_list)
 
     conn.close() 
@@ -51,7 +50,6 @@ def get_stats_sql(offset):
     data = c.fetchone()
 
     median_temp, date = data 
-    print(data)
     conn.commit()
     conn.close() 
 
