@@ -1,46 +1,44 @@
-import requests, sys
+import requests
 from bs4 import BeautifulSoup
+import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 def scrap_behavior():
     r = requests.get('https://pogoda.interia.pl/prognoza-dlugoterminowa-blonie,cId,1689')
     if r.status_code != 200:
-        return("DUPA")
-        return
+        return "DUPA"
     
     soup = BeautifulSoup(r.content, 'html.parser')
-    find_behave = soup.find_all('div', class_='weather-currently-icon ico-6')
-
-    #Find title ind find_behave
+    find_behave = soup.find_all('div', class_='weather-currently-icon')
+    
+    # Find title in find_behave
     for title in find_behave:
         title_text = title.get('title')
 
     match title_text:
         case 'Słonecznie':
-            return('☀️')
+            return '☀️'
         case 'Przeważnie słonecznie':
-            return('🌤️')
+            return '🌤️'
         case 'Częściowo słonecznie':
-            return('⛅')
+            return '⛅'
         case 'Przejściowe zachmurzenie':
-            return('🌥️')
+            return '🌥️'
         case 'Zachmurzenie duże':
-            return('☁️')
+            return '☁️'
         case 'Pochmurno':
-            return('🌫️')
+            return '🌫️'
         case 'Deszcz':
-            return('🌧️')
+            return '🌧️'
         case 'Przelotne opady':
-            return('🌦️')
+            return '🌦️'
         case 'Burze z piorunami':
-            return('⛈️')
+            return '⛈️'
         case 'Częściowo słonecznie i burze z piorunami':
-            return('🌦️⛈️')
+            return '🌦️⛈️'
         case _:
-            return('Nieznany opis pogody')
-
-
+            return '❓'
 
 if __name__ == '__main__':
     scrap_behavior()
