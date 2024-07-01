@@ -12,7 +12,7 @@ const getMedianTempData = (medianTempData) => ({
 })
 
 function get_api() {
-    fetch('http://192.168.178.44:5000/data')
+    fetch('http://192.168.178.44:5000/data') 
         .then(response => {
             return response.json(); 
         })
