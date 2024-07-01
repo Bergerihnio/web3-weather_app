@@ -1,7 +1,8 @@
 const getOldWeather = (oldWeatherData) => ({
     temp: parseFloat(oldWeatherData.temp),
     time: oldWeatherData.time.slice(0,5),
-    rain: oldWeatherData.rain
+    rain: oldWeatherData.rain,
+    emoji: oldWeatherData.emoji
 })
 
 const getMedianTempData = (medianTempData) => ({
@@ -77,19 +78,19 @@ function get_api() {
                 precipitationDiv.textContent = `☔ Chance of precipitation: ${rainPrecipitation}%`;
 
                 const lastHourTempDiv = document.getElementById("hour");
-                lastHourTempDiv.textContent = `${oldWeather.oneHourBack.time} ☀️ ${oldWeather.oneHourBack.temp}°C - ☔ ${oldWeather.oneHourBack.rain}%`;
+                lastHourTempDiv.textContent = `${oldWeather.oneHourBack.time} ${oldWeather.oneHourBack.emoji} ${oldWeather.oneHourBack.temp}°C - ☔ ${oldWeather.oneHourBack.rain}%`;
 
                 const fourthLastHourTempDiv = document.getElementById("fourth_hour");
-                fourthLastHourTempDiv.textContent = `${oldWeather.fourHoursBack.time} ☀️ ${oldWeather.fourHoursBack.temp}°C - ☔ ${oldWeather.fourHoursBack.rain}%`;
+                fourthLastHourTempDiv.textContent = `${oldWeather.fourHoursBack.time} ${oldWeather.fourHoursBack.emoji} ${oldWeather.fourHoursBack.temp}°C - ☔ ${oldWeather.fourHoursBack.rain}%`;
 
                 const seventhLastHourTempDiv = document.getElementById("seventh_hour");
-                seventhLastHourTempDiv.textContent = `${oldWeather.sevenHoursBack.time} 🌥️ ${oldWeather.sevenHoursBack.temp}°C - ☔ ${oldWeather.sevenHoursBack.rain}%`;
+                seventhLastHourTempDiv.textContent = `${oldWeather.sevenHoursBack.time} ${oldWeather.sevenHoursBack.emoji} ${oldWeather.sevenHoursBack.temp}°C - ☔ ${oldWeather.sevenHoursBack.rain}%`;
 
                 const tenHoursBackTempDiv = document.getElementById("tenth_hour");
-                tenHoursBackTempDiv.textContent = `${oldWeather.tenHoursBack.time} 🌦️ ${oldWeather.tenHoursBack.temp}°C - ☔ ${oldWeather.tenHoursBack.rain}%`;
+                tenHoursBackTempDiv.textContent = `${oldWeather.tenHoursBack.time} ${oldWeather.tenHoursBack.emoji} ${oldWeather.tenHoursBack.temp}°C - ☔ ${oldWeather.tenHoursBack.rain}%`;
 
                 const thirteenHoursBackTempDiv = document.getElementById("thirteen_hour");
-                thirteenHoursBackTempDiv.textContent = `${oldWeather.thirteenHoursBack.time} 🌦️ ${oldWeather.thirteenHoursBack.temp}°C - ☔ ${oldWeather.thirteenHoursBack.rain}%`;
+                thirteenHoursBackTempDiv.textContent = `${oldWeather.thirteenHoursBack.time} ${oldWeather.thirteenHoursBack.emoji} ${oldWeather.thirteenHoursBack.temp}°C - ☔ ${oldWeather.thirteenHoursBack.rain}%`;
 
                 const lastMedianDiv = document.getElementById("day");
                 lastMedianDiv.textContent = `🌦️ ${medianTempData.lastMedian.day}, ${medianTempData.lastMedian.date} ${medianTempData.lastMedian.month} ${medianTempData.lastMedian.median_temp}°C`;
