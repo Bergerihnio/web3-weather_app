@@ -27,6 +27,7 @@ function get_api() {
                 interiaTemp = data.interia_temperature;
                 humidity = data.humidity_in_percentage;
                 rainPrecipitation = data.rain_precipitation_percentage;
+                emoji = data.emoji
 
                 const oldWeather = {
                     oneHourBack: getOldWeather(data.last_hour_data),
@@ -69,7 +70,7 @@ function get_api() {
                 windSpeedDiv.textContent = `💨 Wind Speed: ${windSpeed} km/h`;
     
                 const temperatureDiv = document.getElementById("temperature");
-                temperatureDiv.textContent = `${score} Temperature: ${interiaTemp}°C`;
+                temperatureDiv.textContent = `${emoji}${score} Temperature: ${interiaTemp}°C`;
 
                 const humidityDiv = document.getElementById("humidity");
                 humidityDiv.textContent = `💧 Humidity: ${humidity}%`;
