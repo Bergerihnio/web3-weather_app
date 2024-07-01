@@ -2,9 +2,7 @@ import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
 import datetime
-import thermometer
-import web_scrapping
-import stats
+import web_scrapping, stats, thermometer, weather_behavior
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
@@ -21,9 +19,11 @@ i = 0
 def save_schedule_job():
     global i 
     temperature = thermometer.get_temperature()
-    interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
+    interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation, cloudy = web_scrapping.scrap_soup()\
+    
+    emoji = weather_behavior.scrap_behavior()
 
-    save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation)
+    save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation, cloudy, emoji)
     i += 1
 
     print(f'Zapisano pomyślnie po raz {i}')
@@ -34,10 +34,10 @@ def insert_schedule_job():
     print('Zapisano pomyślnie mediane')
 
 # Funkcja do zapisywania temperatury do bazy danych
-def save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation): 
+def save_to_db(interia_temperature, humidity, pressure, sunrise, sunset, wind, rain_precipitation, cloudy, emoji): 
     conn = sqlite3.connect('temperatures.db')
     c = conn.cursor()
-    c.execute("INSERT INTO temperatures (temperature, humidity, pressure, sunrise, sunset, wind, rain) VALUES (?, ?, ?, ?, ?, ?, ?)", (interia_temperature[:2], humidity, pressure, sunrise, sunset, wind, rain_precipitation))
+    c.execute("INSERT INTO temperatures (temperature, humidity, pressure, sunrise, sunset, wind, rain, cloudy, emoji) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (interia_temperature[:2], humidity, pressure, sunrise, sunset, wind, rain_precipitation, cloudy, emoji))
 
     conn.commit()
     conn.close()
@@ -82,7 +82,7 @@ def get_stats_sql(offset):
 def get_data():
     temperature = thermometer.get_temperature()
 
-    interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation = web_scrapping.scrap_soup()
+    interia_temperature, pressure, wind, sunrise, sunset, humidity, rain_precipitation, cloudy = web_scrapping.scrap_soup()
 
     last_hour_temp, last_hour_rain, last_hour_time = get_data_sql(0)
 
@@ -106,6 +106,8 @@ def get_data():
 
     last_fifth_median_temp, last_fifth_median_day_of_week, last_fifth_median_month_word, last_fifth_median_unmutable_date = get_stats_sql(4) 
 
+    emoji = weather_behavior.scrap_behavior()
+
     data = {
         'temperature': f'{temperature}',
         'interia_temperature': f'{interia_temperature[:2]}',
@@ -126,6 +128,8 @@ def get_data():
         'last_third_median_temp': {'median_temp': f'{last_third_median_temp}', 'date': f'{last_third_median_unmutable_date}', 'day': f'{last_third_median_day_of_week}', 'month': f'{last_third_median_month_word}'},
         'last_fourth_median_temp': {'median_temp': f'{last_fourth_median_temp}', 'date': f'{last_fourth_median_unmutable_date}', 'day': f'{last_fourth_median_day_of_week}', 'month': f'{last_fourth_median_month_word}'},
         'last_fifth_median_temp': {'median_temp': f'{last_fifth_median_temp}', 'date': f'{last_fifth_median_unmutable_date}', 'day': f'{last_fifth_median_day_of_week}', 'month': f'{last_fifth_median_month_word}'},
+        'cloudy': cloudy,
+        'emoji': emoji
     }
 
     return jsonify(data)

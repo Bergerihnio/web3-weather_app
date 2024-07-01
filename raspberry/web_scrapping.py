@@ -25,7 +25,24 @@ def scrap_soup():
 
     rain_precipitation = scrap_rain()
 
-    return interia_temp, interia_pressure, interia_wind, interia_sunrise, interia_sunset, humidity, rain_precipitation
+    cloudy =  scrap_soup_details()
+
+    return interia_temp, interia_pressure, interia_wind, interia_sunrise, interia_sunset, humidity, rain_precipitation, cloudy
+
+def scrap_soup_details():
+    r = requests.get('https://pogoda.interia.pl/prognoza-szczegolowa-blonie,cId,1689')
+    if r.status_code != 200:
+        print("DUPA")
+        return
+    
+    soup = BeautifulSoup(r.content, 'html.parser')
+    find_cloudy = soup.find('span', class_='entry-precipitation-value cloud-cover')
+    cloudy = find_cloudy.get_text(strip=True)
+
+    cloudy = cloudy.replace("%", "")
+
+    return cloudy
+
 
 def temp(find_temp):
     interia_temp = find_temp.get_text(strip=True)
