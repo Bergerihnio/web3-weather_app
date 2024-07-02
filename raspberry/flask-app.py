@@ -1,12 +1,9 @@
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
-import datetime
-import web_scrapping
-import stats
-import thermometer
-import weather_behavior
+import datetime, web_scrapping, median, thermometer, weather_behavior, median_emoji
 from apscheduler.schedulers.background import BackgroundScheduler
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -33,10 +30,12 @@ def save_schedule_job():
     print(f'Zapisano pomyślnie po raz {i}')
 
 
-@scheduler.scheduled_job('cron', minute='1', hour='20')
+@scheduler.scheduled_job('cron', minute='0', hour='20')
 def insert_schedule_job():
-    stats.insert_median()
-    print('Zapisano pomyślnie mediane')
+    median.insert_median()
+
+    print('Zapisano pomyślnie mediane temperature')
+    # print('Zapisano pomyślnie mediane emoji')
 
 # Funkcja do zapisywania temperatury do bazy danych
 
@@ -66,7 +65,7 @@ def get_data_sql(offset):
 
 
 def get_stats_sql(offset):
-    median_temp = stats.get_stats_sql(offset)
+    median_temp = median.get_stats_sql(offset)
     median_temp, date = median_temp
 
     unmutable_date = date  # -> 2024-06-26

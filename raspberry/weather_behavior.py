@@ -42,5 +42,7 @@ def scrap_behavior():
         case _:
             return '❓'
 
+
+
 if __name__ == '__main__':
     scrap_behavior()

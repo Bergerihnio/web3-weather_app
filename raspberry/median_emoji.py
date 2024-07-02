@@ -1,30 +1,6 @@
+import statistics
 import sqlite3
 from datetime import date
-
-# # Tworzenie połączenia z bazą danych
-conn = sqlite3.connect('temperatures.db')
-c = conn.cursor()
-
-# # Tworzenie tabeli
-c.execute('''CREATE TABLE IF NOT EXISTS weather
-            (temperature REAL,
-            humidity INTEGER,
-            pressure INTEGER,
-            wind INTEGER,
-            rain INTEGER,
-            emoji INTEGER,
-            cloudy INTEGER,   
-            sunrise  TEXT DATETIME,
-            sunset TEXT DATETIME,       
-            time TEXT DEFAULT (time('now', 'localtime')),
-            date TEXT DEFAULT (date('now')))''')
-
-# # Zapisanie zmian
-conn.commit()
-
-# Zamknięcie połączenia
-conn.close()
-
 
 def get_stats_emoji():
     conn = sqlite3.connect('temperatures.db')
@@ -41,12 +17,12 @@ def get_stats_emoji():
     rows_list = []
     for row in rows:
         rows_list.append(row[0])
-    
     conn.close()
 
-    average_emoji = the_most_occurate(rows_list)
-    
-    return average_emoji
+    emoji_string = the_most_occurate(rows_list)
+
+    return emoji_string
+
 
 def the_most_occurate(emoji_list):
     counter = 0
@@ -59,9 +35,21 @@ def the_most_occurate(emoji_list):
         elif current == counter:
             if element not in the_most_occ:
                 the_most_occ.append(element)
-    return the_most_occ
+    emoji_string = ''.join(the_most_occ)
+    return emoji_string
 
-# print(the_most_occurate(emoji_list))
+# def insert_median_emoji():
+#     conn = sqlite3.connect('statistics.db')
+#     c = conn.cursor()
 
-print(get_stats_emoji())
+#     average_emoji = get_stats_emoji()
 
+#     emoji_string = ''.join(average_emoji)
+    
+#     c.execute("INSERT INTO statistics (weather) VALUES (?)", (emoji_string,))
+
+#     conn.commit()
+#     conn.close()
+
+if __name__ == '__main__':
+    get_stats_emoji()

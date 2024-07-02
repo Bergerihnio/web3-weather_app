@@ -1,6 +1,7 @@
 import statistics
 import sqlite3
 from datetime import date
+import median_emoji
 
 
 def get_stats():
@@ -31,12 +32,15 @@ def insert_median():
     c = conn.cursor()
 
     c.execute('''CREATE TABLE IF NOT EXISTS statistics
-                (median_temp REAL,    
+                (median_temp REAL,
+                weather TEXT,    
                 date TEXT DEFAULT (date('now')))''')
 
     median_temp = get_stats()
 
-    c.execute("INSERT INTO statistics (median_temp) VALUES (?)", (median_temp,))
+    emoji_string = median_emoji.get_stats_emoji()
+
+    c.execute("INSERT INTO statistics (median_temp, weather) VALUES (?, ?)", (median_temp, emoji_string))
 
     conn.commit()
     conn.close()
