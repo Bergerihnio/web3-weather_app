@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import datetime, web_scrapping, median, thermometer, weather_behavior, median_emoji
 from apscheduler.schedulers.background import BackgroundScheduler
+from colorama import Fore
 
 app = Flask(__name__)
 CORS(app)
@@ -26,13 +27,13 @@ def save_schedule_job():
                sunset, wind, rain_precipitation, cloudy, emoji)
     i += 1
 
-    print(f'Zapisano pomyślnie po raz {i}')
+    print(Fore.GREEN + f'Zapisano pomyślnie po raz {i}')
 
 
 @scheduler.scheduled_job('cron', minute='1', hour='20')
 def insert_schedule_job():
     median.insert_median()
-    print('Weather conditions successfully recorded')
+    print(Fore.GREEN + 'Weather conditions successfully recorded')
 
 
 # Funkcja do zapisywania temperatury do bazy danych

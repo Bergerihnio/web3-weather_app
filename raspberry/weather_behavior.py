@@ -29,8 +29,10 @@ def scrap_behavior():
             return '☁️'
         case 'Zachmurzenie małe':
             return '☁️'
+        case 'Zachmurzenie umiarkowane':
+            return '☁️'
         case 'Pochmurno':
-            return '🌫️'
+            return '🌫️' 
         case 'Deszcz':
             return '🌧️'
         case 'Przelotne opady':
