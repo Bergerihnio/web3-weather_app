@@ -16,20 +16,18 @@ body {
 
 .container {
     background-color: #fff;
-    padding: 40px 40px 30px 40px;
+    padding: 40px 30px 40px 30px;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    width: 50vw;
-    min-width: 320px;
-
+    width: 55vw;
+    /* min-width: 320px; */
 }
 
 .location-time {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    text-align: center;
-    align-items: center;
+    /* text-align: center; */
     font-weight: bold;
 }
 
@@ -38,7 +36,7 @@ body {
 }
 
 .location {
-    font-size: 1.2em;
+    font-size: 1.5em;
 }
 
 #temperature {
@@ -46,7 +44,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
-    margin-top: 25px;
+    margin-top: 15px;
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -63,11 +61,15 @@ body {
 }
 
 .forecast {
-    margin-top: 20px;
-    display: flex;
+    margin-top: 10px;
     justify-content: center;
-    flex-wrap: wrap;
+    text-align: center;
+    display: flex;
     gap: 40px;
+}
+
+.five-day {
+    margin-top: 0px;
 }
 
 .day, .hour  ,#hour, #fourth_hour, #seventh_hour, #tenth_hour, #thirteen_hour, #day, #last_day, #second_last_day, #third_last_day, #fourth_last_day {
@@ -82,4 +84,84 @@ body {
 .day:hover, #day:hover, #last_day:hover, #second_last_day:hover, #third_last_day:hover, #fourth_last_day:hover, .hour:hover, #hour:hover, #fourth_hour:hover, #seventh_hour:hover, #tenth_hour:hover, #thirteen_hour:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgb(3, 174, 210, 0.5);
+}
+
+@media (max-width: 640px) {
+    * {
+        font-size: 19px;
+    }
+
+    body {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .container {
+        padding: 25px;
+        width: 85vw;
+    }
+    .forecast {
+        gap: 4px;
+    }
+
+    .location-time {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #temperature {
+        margin-top: 10px;
+    }
+
+    #time {
+        display: none;
+    }
+
+    .location {
+        font-size: 2em;
+        text-align: center;
+        margin-right: 25px;
+    }
+
+    #date {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .forecast {
+        margin-top: 8px;
+        flex-wrap: wrap-reverse;
+        justify-content: center;
+        text-align: center;
+        display: flex;
+        flex-direction: column-reverse;
+
+    }
+    
+    .day, .hour  ,#hour, #fourth_hour, #seventh_hour, #tenth_hour, #thirteen_hour, #day, #last_day, #second_last_day, #third_last_day, #fourth_last_day {
+        padding: 10px 10px 10px 10px;
+        margin: 10px 0 10px 0;
+        border-radius: 5px;
+    }
+    
+}
+
+
+@media (min-width: 640px) and (max-width: 1203px) {
+    * {
+        font-size: 19px;
+    }
+
+    body {
+        padding-top: 80px;
+        padding-bottom: 20px;
+    }
+
+    .container {
+        padding: 25px;
+        width: 70vw;
+    }
+    .forecast {
+        gap: 30px;
+    }
 }

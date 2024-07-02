@@ -26,6 +26,7 @@ def get_stats_emoji():
 
 def the_most_occurate(emoji_list):
     counter = 0
+    the_most_occ = []
     for element in emoji_list:
         current = emoji_list.count(element)
         if (current > counter):

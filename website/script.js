@@ -9,7 +9,8 @@ const getMedianTempData = (medianTempData) => ({
     date: medianTempData.date.slice(8, 11),
     median_temp: parseFloat(medianTempData.median_temp),
     month: medianTempData.month,
-    day: medianTempData.day
+    day: medianTempData.day,
+    median_emoji: medianTempData.median_emoji
 })
 
 function get_api() {
@@ -46,15 +47,16 @@ function get_api() {
                     lastFifthMedian: getMedianTempData(data.last_fifth_median_temp)
                 }
 
-                if (interiaTemp < 15) {
-                    score = "🧊🥶";
-                } else if (interiaTemp > 30) {
-                    score = "🥵"
-                } else {
-                    score = "🌡️😎";
-                }
                 
 
+                if (interiaTemp < 15) {
+                    score = ""//🧊🥶";
+                } else if (interiaTemp > 30) {
+                    score = ""// "🥵"
+                } else {
+                    score = ""//"🌡️😎";
+                }
+                
                 const { day, dayDigit, month } = get_date();
 
                 const pressureDiv = document.getElementById("pressure");
@@ -70,7 +72,7 @@ function get_api() {
                 windSpeedDiv.textContent = `💨 Wind Speed: ${windSpeed} km/h`;
     
                 const temperatureDiv = document.getElementById("temperature");
-                temperatureDiv.textContent = `${emoji}${score} Temperature: ${interiaTemp}°C`;
+                temperatureDiv.textContent = `${emoji}${score} Temperature ${interiaTemp}°C`;
 
                 const humidityDiv = document.getElementById("humidity");
                 humidityDiv.textContent = `💧 Humidity: ${humidity}%`;
@@ -94,19 +96,19 @@ function get_api() {
                 thirteenHoursBackTempDiv.textContent = `${oldWeather.thirteenHoursBack.time} ${oldWeather.thirteenHoursBack.emoji} ${oldWeather.thirteenHoursBack.temp}°C - ☔ ${oldWeather.thirteenHoursBack.rain}%`;
 
                 const lastMedianDiv = document.getElementById("day");
-                lastMedianDiv.textContent = `🌦️ ${medianTempData.lastMedian.day}, ${medianTempData.lastMedian.date} ${medianTempData.lastMedian.month} ${medianTempData.lastMedian.median_temp}°C`;
+                lastMedianDiv.textContent = `${medianTempData.lastMedian.median_emoji} ${medianTempData.lastMedian.day}, ${medianTempData.lastMedian.date} ${medianTempData.lastMedian.month} ${medianTempData.lastMedian.median_temp}°C`;
 
                 const lastSecondMedianDiv = document.getElementById("last_day");
-                lastSecondMedianDiv.textContent = `⛅ ${medianTempData.lastSecondMedian.day}, ${medianTempData.lastSecondMedian.date} ${medianTempData.lastSecondMedian.month} ${medianTempData.lastSecondMedian.median_temp}°C`;
+                lastSecondMedianDiv.textContent = `${medianTempData.lastSecondMedian.median_emoji} ${medianTempData.lastSecondMedian.day}, ${medianTempData.lastSecondMedian.date} ${medianTempData.lastSecondMedian.month} ${medianTempData.lastSecondMedian.median_temp}°C`;
 
                 const lastThirdMedianDiv = document.getElementById("second_last_day");
-                lastThirdMedianDiv.textContent = `☀️ ${medianTempData.lastThirdMedian.day}, ${medianTempData.lastThirdMedian.date} ${medianTempData.lastThirdMedian.month} ${medianTempData.lastThirdMedian.median_temp}°C`;
+                lastThirdMedianDiv.textContent = `${medianTempData.lastThirdMedian.median_emoji} ${medianTempData.lastThirdMedian.day}, ${medianTempData.lastThirdMedian.date} ${medianTempData.lastThirdMedian.month} ${medianTempData.lastThirdMedian.median_temp}°C`;
 
                 const lastFourthMedianDiv = document.getElementById("third_last_day");
-                lastFourthMedianDiv.textContent = `🌥️ ${medianTempData.lastFourthMedian.day}, ${medianTempData.lastFourthMedian.date} ${medianTempData.lastFourthMedian.month} ${medianTempData.lastFourthMedian.median_temp}°C`;
+                lastFourthMedianDiv.textContent = `${medianTempData.lastFourthMedian.median_emoji} ${medianTempData.lastFourthMedian.day}, ${medianTempData.lastFourthMedian.date} ${medianTempData.lastFourthMedian.month} ${medianTempData.lastFourthMedian.median_temp}°C`;
 
                 const lastFifthMedianDiv = document.getElementById("fourth_last_day");
-                lastFifthMedianDiv.textContent = `🌧️ ${medianTempData.lastFifthMedian.day}, ${medianTempData.lastFifthMedian.date} ${medianTempData.lastFifthMedian.month} ${medianTempData.lastFifthMedian.median_temp}°C`;
+                lastFifthMedianDiv.textContent = `${medianTempData.lastFifthMedian.median_emoji} ${medianTempData.lastFifthMedian.day}, ${medianTempData.lastFifthMedian.date} ${medianTempData.lastFifthMedian.month} ${medianTempData.lastFifthMedian.median_temp}°C`;
             }
         })
 
