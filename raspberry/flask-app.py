@@ -29,10 +29,10 @@ def save_schedule_job():
     print(f'Zapisano pomyślnie po raz {i}')
 
 
-@scheduler.scheduled_job('cron', minute='0', hour='20')
+@scheduler.scheduled_job('cron', minute='1', hour='20')
 def insert_schedule_job():
     median.insert_median()
-    print('Pomyślnie zapisano średnie warunki pogodowe')
+    print('Weather conditions successfully recorded')
 
 
 # Funkcja do zapisywania temperatury do bazy danych
@@ -62,7 +62,7 @@ def get_data_sql(offset):
 
 def get_stats_sql(offset):
     median_temp = median.get_stats_sql(offset)
-    median_temp, date = median_temp
+    median_temp, date, weather = median_temp
 
     unmutable_date = date  # -> 2024-06-26
     date = date[5:10]  # -> 06-26
@@ -81,7 +81,7 @@ def get_stats_sql(offset):
     date_obj = datetime.datetime.strptime(unmutable_date, '%Y-%m-%d')
     day_of_week = date_obj.strftime('%A')
 
-    return median_temp, day_of_week, month_word, unmutable_date
+    return median_temp, day_of_week, month_word, unmutable_date, weather
 
 
 @app.route('/data', methods=['GET'])
@@ -104,15 +104,15 @@ def get_data():
 
     last_13th_hour_temp, last_13th_hour_rain, last_13th_hour_time, last_13th_hour_emoji = get_data_sql(12)
 
-    last_median_temp, last_median_day_of_week, last_median_month_word, last_median_unmutable_date = get_stats_sql(0)
+    last_median_temp, last_median_day_of_week, last_median_month_word, last_median_unmutable_date, last_median_weather_emoji = get_stats_sql(0)
 
-    last_second_median_temp, last_second_median_day_of_week, last_second_median_month_word, last_second_median_unmutable_date = get_stats_sql(1)
+    last_second_median_temp, last_second_median_day_of_week, last_second_median_month_word, last_second_median_unmutable_date, last_second_median_weather_emoji = get_stats_sql(1)
 
-    last_third_median_temp, last_third_median_day_of_week, last_third_median_month_word, last_third_median_unmutable_date = get_stats_sql(2)
+    last_third_median_temp, last_third_median_day_of_week, last_third_median_month_word, last_third_median_unmutable_date, last_third_median_weather_emoji = get_stats_sql(2)
 
-    last_fourth_median_temp, last_fourth_median_day_of_week, last_fourth_median_month_word, last_fourth_median_unmutable_date = get_stats_sql(3)
+    last_fourth_median_temp, last_fourth_median_day_of_week, last_fourth_median_month_word, last_fourth_median_unmutable_date, last_fourth_median_weather_emoji = get_stats_sql(3)
 
-    last_fifth_median_temp, last_fifth_median_day_of_week, last_fifth_median_month_word, last_fifth_median_unmutable_date = get_stats_sql(4)
+    last_fifth_median_temp, last_fifth_median_day_of_week, last_fifth_median_month_word, last_fifth_median_unmutable_date, last_fifth_median_weather_emoji = get_stats_sql(4)
 
 
     data = {
@@ -132,11 +132,11 @@ def get_data():
         'last_10th_hour_data': {'time': f'{last_10th_hour_time}', 'temp': f'{last_10th_hour_temp}', 'rain': f'{last_10th_hour_rain}', 'emoji': last_10th_hour_emoji},
         'last_13th_hour_data': {'time': f'{last_13th_hour_time}', 'temp': f'{last_13th_hour_temp}', 'rain': f'{last_13th_hour_rain}', 'emoji': last_13th_hour_emoji},
 
-        'last_median_temp': {'median_temp': f'{last_median_temp}', 'date': f'{last_median_unmutable_date}', 'day': f'{last_median_day_of_week}', 'month': f'{last_median_month_word}'},
-        'last_second_median_temp': {'median_temp': f'{last_second_median_temp}', 'date': f'{last_second_median_unmutable_date}', 'day': f'{last_second_median_day_of_week}', 'month': f'{last_second_median_month_word}'},
-        'last_third_median_temp': {'median_temp': f'{last_third_median_temp}', 'date': f'{last_third_median_unmutable_date}', 'day': f'{last_third_median_day_of_week}', 'month': f'{last_third_median_month_word}'},
-        'last_fourth_median_temp': {'median_temp': f'{last_fourth_median_temp}', 'date': f'{last_fourth_median_unmutable_date}', 'day': f'{last_fourth_median_day_of_week}', 'month': f'{last_fourth_median_month_word}'},
-        'last_fifth_median_temp': {'median_temp': f'{last_fifth_median_temp}', 'date': f'{last_fifth_median_unmutable_date}', 'day': f'{last_fifth_median_day_of_week}', 'month': f'{last_fifth_median_month_word}'},
+        'last_median_temp': {'median_temp': f'{last_median_temp}', 'date': f'{last_median_unmutable_date}', 'day': f'{last_median_day_of_week}', 'month': f'{last_median_month_word}', 'median_emoji': f'{last_median_weather_emoji}'},
+        'last_second_median_temp': {'median_temp': f'{last_second_median_temp}', 'date': f'{last_second_median_unmutable_date}', 'day': f'{last_second_median_day_of_week}', 'month': f'{last_second_median_month_word}', 'median_emoji': f'{last_second_median_weather_emoji}'},
+        'last_third_median_temp': {'median_temp': f'{last_third_median_temp}', 'date': f'{last_third_median_unmutable_date}', 'day': f'{last_third_median_day_of_week}', 'month': f'{last_third_median_month_word}', 'median_emoji': f'{last_third_median_weather_emoji}'},
+        'last_fourth_median_temp': {'median_temp': f'{last_fourth_median_temp}', 'date': f'{last_fourth_median_unmutable_date}', 'day': f'{last_fourth_median_day_of_week}', 'month': f'{last_fourth_median_month_word}', 'median_emoji': f'{last_fourth_median_weather_emoji}'},
+        'last_fifth_median_temp': {'median_temp': f'{last_fifth_median_temp}', 'date': f'{last_fifth_median_unmutable_date}', 'day': f'{last_fifth_median_day_of_week}', 'month': f'{last_fifth_median_month_word}', 'median_emoji': f'{last_fifth_median_weather_emoji}'},
         'cloudy': cloudy,
         'emoji': emoji
     }

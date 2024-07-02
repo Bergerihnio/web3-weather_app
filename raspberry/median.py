@@ -50,15 +50,15 @@ def get_stats_sql(offset):
     conn = sqlite3.connect('statistics.db')
     c = conn.cursor()
     c.execute(
-        "SELECT median_temp, date FROM statistics ORDER BY DATE DESC LIMIT 1 OFFSET (?)", (offset,))
+        "SELECT median_temp, date, weather FROM statistics ORDER BY DATE DESC LIMIT 1 OFFSET (?)", (offset,))
 
     data = c.fetchone()
 
-    median_temp, date = data
+    median_temp, date, weather = data
     conn.commit()
     conn.close()
 
-    return median_temp, date
+    return median_temp, date, weather
 
 
 if __name__ == '__main__':

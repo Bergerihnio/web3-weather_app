@@ -1,11 +1,12 @@
 import sqlite3
 from datetime import date
 
+
 def get_stats_emoji():
     conn = sqlite3.connect('temperatures.db')
     c = conn.cursor()
 
-    data =  f'{date.today()}'
+    data = f'{date.today()}'
     time_start = '10:00:00'
     time_end = '20:00:00'
 
@@ -22,6 +23,7 @@ def get_stats_emoji():
 
     return emoji_string
 
+
 def the_most_occurate(emoji_list):
     counter = 0
     for element in emoji_list:
@@ -35,6 +37,7 @@ def the_most_occurate(emoji_list):
                 the_most_occ.append(element)
     emoji_string = ''.join(the_most_occ)
     return emoji_string
+
 
 if __name__ == '__main__':
     get_stats_emoji()
