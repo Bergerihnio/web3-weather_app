@@ -1,3 +1,5 @@
+let loaded = false;
+
 const getOldWeather = (oldWeatherData) => ({
     temp: parseFloat(oldWeatherData.temp),
     time: oldWeatherData.time.slice(0,5),
@@ -13,9 +15,12 @@ const getMedianTempData = (medianTempData) => ({
     median_emoji: medianTempData.median_emoji
 })
 
-function get_api() {
+
+function getApi() {
     fetch('http://192.168.178.44:5000/data') 
         .then(response => {
+            loaded = true;
+            hideLoaderAndDisplayContainer();
             return response.json(); 
         })
         .then(data => {
@@ -45,16 +50,6 @@ function get_api() {
                     lastThirdMedian: getMedianTempData(data.last_third_median_temp),
                     lastFourthMedian: getMedianTempData(data.last_fourth_median_temp),
                     lastFifthMedian: getMedianTempData(data.last_fifth_median_temp)
-                }
-
-                
-
-                if (interiaTemp < 15) {
-                    score = ""//🧊🥶";
-                } else if (interiaTemp > 30) {
-                    score = ""// "🥵"
-                } else {
-                    score = ""//"🌡️😎";
                 }
                 
                 const { day, dayDigit, month } = get_date();
@@ -117,8 +112,9 @@ function get_api() {
         })
 }
 
-setInterval(get_api, 600000);
-get_api();
+
+setInterval(getApi, 600000);
+getApi();
 
 function get_date() {
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -144,7 +140,6 @@ function display_date() {
 setInterval(display_date, 86400000);
 display_date();
 
-
 function get_time() {
     const d = new Date()
     let minutes = d.getMinutes();
@@ -160,4 +155,11 @@ function get_time() {
 setInterval(get_time, 60000);
 get_time();
 
-
+function hideLoaderAndDisplayContainer() {
+    if (loaded) {
+        const loader = document.getElementById('loader');
+        const container = document.getElementById('container');
+        loader.style.display = 'none';
+        container.style.display = 'block';
+    }
+}
