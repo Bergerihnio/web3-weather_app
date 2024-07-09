@@ -67,7 +67,7 @@ function getApi() {
                 windSpeedDiv.textContent = `💨 Wind Speed: ${windSpeed} km/h`;
     
                 const temperatureDiv = document.getElementById("temperature");
-                temperatureDiv.textContent = `${emoji}${score} Temperature ${interiaTemp}°C`;
+                temperatureDiv.textContent = `${emoji} Temperature ${interiaTemp}°C`;
 
                 const humidityDiv = document.getElementById("humidity");
                 humidityDiv.textContent = `💧 Humidity: ${humidity}%`;
@@ -112,7 +112,6 @@ function getApi() {
         })
 }
 
-
 setInterval(getApi, 600000);
 getApi();
 
@@ -129,7 +128,7 @@ function get_date() {
 }
 
 
-function display_date() {
+function displayDate() {
     
     const { day, dayDigit, month } = get_date();
  
@@ -137,10 +136,10 @@ function display_date() {
     dateDiv.textContent = `📅 ${day}, ${dayDigit} ${month}`;
 }
 
-setInterval(display_date, 86400000);
-display_date();
+setInterval(displayDate, 86400000);
+displayDate();
 
-function get_time() {
+function getTime() {
     const d = new Date()
     let minutes = d.getMinutes();
     let hours = d.getHours();
@@ -152,8 +151,8 @@ function get_time() {
     timeDiv.textContent = `🕘 ${hours}:${minutes}`;
 }
 
-setInterval(get_time, 60000);
-get_time();
+setInterval(getTime, 60000);
+getTime();
 
 function hideLoaderAndDisplayContainer() {
     if (loaded) {
