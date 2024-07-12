@@ -17,7 +17,7 @@ const getMedianTempData = (medianTempData) => ({
 
 
 function getApi() {
-    fetch('http://bergerihnio.ddns.net/data') 
+    fetch('https://flask.bergerihnio.xyz/data')
         .then(response => {
             loaded = true;
             hideLoaderAndDisplayContainer();
