@@ -4,14 +4,16 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
+
 def scrap_behavior():
-    r = requests.get('https://pogoda.interia.pl/prognoza-dlugoterminowa-blonie,cId,1689')
+    r = requests.get(
+        'https://pogoda.interia.pl/prognoza-dlugoterminowa-blonie,cId,1689')
     if r.status_code != 200:
         return "DUPA"
-    
+
     soup = BeautifulSoup(r.content, 'html.parser')
     find_behave = soup.find_all('div', class_='weather-currently-icon')
-    
+
     # Find title in find_behave
     for title in find_behave:
         title_text = title.get('title')
@@ -23,6 +25,8 @@ def scrap_behavior():
             return '🌤️'
         case 'Częściowo słonecznie':
             return '⛅'
+        case 'Bezchmurnie':
+            return '🌞'
         case 'Przejściowe zachmurzenie':
             return '🌥️'
         case 'Zachmurzenie duże':
@@ -32,7 +36,7 @@ def scrap_behavior():
         case 'Zachmurzenie umiarkowane':
             return '☁️'
         case 'Pochmurno':
-            return '🌫️' 
+            return '🌫️'
         case 'Deszcz':
             return '🌧️'
         case 'Przelotne opady':
@@ -43,8 +47,6 @@ def scrap_behavior():
             return '🌦️⛈️'
         case _:
             return '❓'
-
-
 
 if __name__ == '__main__':
     scrap_behavior()
